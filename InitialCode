@@ -1,0 +1,29 @@
+library(dplyr)
+lyrics = read.csv("Lyrics1.csv")
+lyrics.save = lyrics
+
+colnames(lyrics)
+head(levels(lyrics$Band))
+tail(levels(lyrics$Band))
+#artist tracker: 21387 artists
+artists = levels(lyrics$Band)
+x = "Blake"
+artists[which(substr(artists, 1, nchar(x)) == x)]
+
+#Removing \n:
+test  = lyrics$Lyrics[1:2]
+test = gsub("\n", " ", test)
+
+
+#Number of times a word is mentioned:
+num.words = function(artist, word){
+  x = which(lyrics$Band == artist)
+  count = function(word, x){
+    sum((gregexpr(paste("[[:space:]]", word, "[[:space:]]", sep = ""), lyrics$Lyrics[x])[[1]])>0)
+  }
+  unlist(lapply(x ,count, word = word))
+}
+yolo = num.words("Blake", "bitch")
+mean(yolo)
+sd(yolo)
+#Standardise by the number of songs?
